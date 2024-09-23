@@ -73,5 +73,5 @@ router.get('/inventario', inventarioController.obtenerInventarios);  // Ruta par
 router.put('/inventario', inventarioController.actualizarInventario);  // Ruta para actualizar un ítem de inventario
 router.delete('/inventario/:Inventario_ID', inventarioController.eliminarInventario);  // Ruta para eliminar un ítem de inventario
 
-
+/////Comit
 module.exports = router;
