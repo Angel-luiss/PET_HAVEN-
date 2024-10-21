@@ -35,6 +35,31 @@ async function obtenerReservaciones(req, res) {
   }
 }
 
+// Nuevo controlador para obtener reservaciones por id de usuario
+async function obtenerReservacionesPorUsuario(req, res) {
+  try {
+    const id_usuario = req.params.id_usuario;  // Captura el id del usuario desde la URL
+    const reservaciones = await Reservacion.obtenerPorUsuario(id_usuario);
+    res.status(200).json(reservaciones);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+
+// Nuevo controlador para obtener el historial de reservas por id de usuario
+async function obtenerHistorialReservaciones(req, res) {
+  try {
+    const id_usuario = req.params.id_usuario;  // Captura el id del usuario desde la URL
+    const historial = await Reservacion.obtenerHistorialPorUsuario(id_usuario);
+    res.status(200).json(historial);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+
+
 async function actualizarReservacion(req, res) {
   try {
     const result = await Reservacion.actualizar(req.body);
@@ -57,5 +82,7 @@ module.exports = {
   crearReservacion,
   obtenerReservaciones,
   actualizarReservacion,
-  eliminarReservacion
+  eliminarReservacion,
+  obtenerHistorialReservaciones,
+  obtenerReservacionesPorUsuario
 };

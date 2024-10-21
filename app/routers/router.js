@@ -111,6 +111,20 @@ const servicioReservacionController = require('../controllers/servicios_reservac
 router.post('/servicios_reservaciones', servicioReservacionController.crearMultiplesServiciosReservacion);  // Ruta para crear un nuevos servicio de reservación multiples servicios de reserv
 
 
+const reservacionController = require('../controllers/reservaciones.controller.js');
+router.post('/reservaciones', reservacionController.crearReservacion);  // Ruta para crear una nueva reservación
+router.get('/reservaciones', reservacionController.obtenerReservaciones);  // Ruta para obtener todas las reservaciones
+router.put('/reservaciones', reservacionController.actualizarReservacion);  // Ruta para actualizar una reservación
+router.delete('/reservaciones/:Reservacion_ID', reservacionController.eliminarReservacion);  // Ruta para eliminar una reservación
+// Nueva ruta para obtener reservaciones por id de usuario
+router.get('/reservaciones/usuario/:id_usuario', reservacionController.obtenerReservacionesPorUsuario);
+router.get('/reservaciones/historial/:id_usuario', reservacionController.obtenerHistorialReservaciones);
+
+
+
+
+
+
 
 
 
@@ -138,11 +152,7 @@ router.get('/precios', precioController.obtenerPrecios);  // Ruta para obtener t
 router.put('/precios', precioController.actualizarPrecio);  // Ruta para actualizar un precio
 router.delete('/precios/:Precio_ID', precioController.eliminarPrecio);  // Ruta para eliminar un precio
 
-const reservacionController = require('../controllers/reservaciones.controller.js');
-router.post('/reservaciones', reservacionController.crearReservacion);  // Ruta para crear una nueva reservación
-router.get('/reservaciones', reservacionController.obtenerReservaciones);  // Ruta para obtener todas las reservaciones
-router.put('/reservaciones', reservacionController.actualizarReservacion);  // Ruta para actualizar una reservación
-router.delete('/reservaciones/:Reservacion_ID', reservacionController.eliminarReservacion);  // Ruta para eliminar una reservación
+
 
 
 
