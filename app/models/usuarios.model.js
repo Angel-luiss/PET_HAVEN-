@@ -60,6 +60,22 @@ const Usuario = {
     }
   },
 
+  // Eliminar usuario
+  eliminar: async (Usuario_ID) => {
+    const query = `
+      DELETE FROM Usuarios
+      WHERE USUARIO_ID = :Usuario_ID
+    `;
+    const binds = { Usuario_ID };
+
+    try {
+      await db.executeQuery(query, binds, { autoCommit: true });
+      return { message: 'Usuario eliminado con éxito' };
+    } catch (err) {
+      throw new Error('Error al eliminar el usuario: ' + err.message);
+    }
+  },
+
   // Buscar usuario por correo
   findByEmail: async (correo) => {
     const query = `SELECT USUARIO_ID, NOMBRE_USUARIO, CORREO, CONTRASEÑA, ROL, TELEFONO, AVATAR_URL FROM USUARIOS WHERE CORREO = :correo`;
@@ -68,16 +84,13 @@ const Usuario = {
     try {
       const result = await db.executeQuery(query, binds);
   
-      // Verifica si el usuario fue encontrado
       if (result.rows.length === 0) {
         return null;
       }
   
-      // Asumiendo que Oracle devuelve los resultados como un array
-      const usuario = result.rows[0];  // La primera fila de resultados
-      const columnNames = result.metaData.map(col => col.name);  // Obtener nombres de las columnas
+      const usuario = result.rows[0];
+      const columnNames = result.metaData.map(col => col.name);
   
-      // Crear un objeto con los datos del usuario, incluyendo el campo Avatar URL
       const userObj = {
         USUARIO_ID: usuario[columnNames.indexOf('USUARIO_ID')],
         NOMBRE_USUARIO: usuario[columnNames.indexOf('NOMBRE_USUARIO')],
@@ -85,22 +98,44 @@ const Usuario = {
         CONTRASEÑA: usuario[columnNames.indexOf('CONTRASEÑA')],
         ROL: usuario[columnNames.indexOf('ROL')],
         TELEFONO: usuario[columnNames.indexOf('TELEFONO')],
-        AVATAR_URL: usuario[columnNames.indexOf('AVATAR_URL')],  // Incluir el campo Avatar URL
+        AVATAR_URL: usuario[columnNames.indexOf('AVATAR_URL')],
       };
   
-      return userObj;  // Retorna un objeto con los datos correctos
+      return userObj;
     } catch (err) {
       throw new Error("Error al buscar el usuario: " + err.message);
     }
   },
 
-  // Función para comparar contraseñas
+  // Comparar contraseñas
   comparePassword: async (password, hash) => {
     if (!password || !hash) {
       throw new Error('Contraseña o hash no definidos');
     }
     return bcrypt.compare(password, hash);
   },
+
+  // Obtener todos los usuarios
+  obtenerTodos: async () => {
+    const query = `SELECT USUARIO_ID, NOMBRE_USUARIO, CORREO, ROL, TELEFONO, AVATAR_URL FROM USUARIOS`;
+    
+    try {
+      const result = await db.executeQuery(query);
+      return result.rows.map(row => {
+        const columnNames = result.metaData.map(col => col.name);
+        return {
+          USUARIO_ID: row[columnNames.indexOf('USUARIO_ID')],
+          NOMBRE_USUARIO: row[columnNames.indexOf('NOMBRE_USUARIO')],
+          CORREO: row[columnNames.indexOf('CORREO')],
+          ROL: row[columnNames.indexOf('ROL')],
+          TELEFONO: row[columnNames.indexOf('TELEFONO')],
+          AVATAR_URL: row[columnNames.indexOf('AVATAR_URL')],
+        };
+      });
+    } catch (err) {
+      throw new Error("Error al obtener usuarios: " + err.message);
+    }
+  }
 };
 
 module.exports = Usuario;

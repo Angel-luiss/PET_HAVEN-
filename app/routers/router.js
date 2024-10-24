@@ -74,7 +74,7 @@ router.put('/usuarios/update', uploadPerfil.single('file'), authController.actua
 
 // Rutas de usuarios
 const usuarioController = require('../controllers/usuarios.controller.js');
-router.post('/usuarios', usuarioController.crearUsuario);
+router.post('/usuarios', uploadPerfil.single('file'), usuarioController.crearUsuario);
 router.get('/usuarios', usuarioController.obtenerUsuarios);
 router.put('/usuarios', usuarioController.actualizarUsuario);
 router.delete('/usuarios/:Usuario_ID', usuarioController.eliminarUsuario);
