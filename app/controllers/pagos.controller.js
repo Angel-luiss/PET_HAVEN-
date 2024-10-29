@@ -1,6 +1,25 @@
 //const Pago = require('../models/pagos.model.js');
 const Pago = require('../models/pagos.model.js');
 
+// pagos.controller.js
+const stripe = require('stripe')('sk_test_51Q7rPlP9VBpcKRyaRqtSmgjJu7s1mYf9tjoBc0Q5AB65wfB7LILzQjzZNCmSI9AsSmN3xYtMeToUQuUrW2SFjYPe00JxlYWKOp'); // Clave secreta de Stripe
+
+async function crearIntencion(req, res) {
+  const { amount } = req.body;
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // Convertir a centavos
+      currency: 'usd',
+      payment_method_types: ['card'],
+    });
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 // Función para crear un nuevo pago
 async function crearPago(req, res) {
   try {
@@ -47,5 +66,6 @@ module.exports = {
   crearPago,
   obtenerPagos,
   actualizarPago,
-  eliminarPago
+  eliminarPago,
+  crearIntencion
 };

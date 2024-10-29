@@ -8,6 +8,7 @@ const { obtenerHabitacionesDisponibles } = require('../controllers/habitaciones.
 const sendEmail = require('../controllers/sendcorreo.controller.js');
 
 
+
 // Ruta para enviar el correo de confirmación
 router.post('/send-email', async (req, res) => {
   const { to, subject, htmlContent } = req.body;
@@ -105,6 +106,9 @@ router.post('/pagos', pagoController.crearPago);  // Ruta para crear un nuevo pa
 router.get('/pagos', pagoController.obtenerPagos);  // Ruta para obtener todos los pagos
 router.put('/pagos', pagoController.actualizarPago);  // Ruta para actualizar un pago
 router.delete('/pagos/:Pago_ID', pagoController.eliminarPago);  // Ruta para eliminar un pago
+router.post('/crear-intencion', pagoController.crearIntencion);
+
+
 
 
 const servicioReservacionController = require('../controllers/servicios_reservacion.controller.js');
